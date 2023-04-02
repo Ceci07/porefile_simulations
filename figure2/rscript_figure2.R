@@ -10,8 +10,7 @@ library(RColorBrewer)
 library(tidyr)
 library(ggsignif)
 
-
-setwd("/mnt/raid2tb/bubble/porefile/figure3/figure2/")
+setwd("./")
 
 df <- read.csv("raw/BVBRC_genome.csv", header = T)
 head(df)
@@ -38,11 +37,13 @@ write.table(retrive, "output_tables/retrive.txt",
             sep = "\t", row.names = F, quote = F)
 
 
-#Matching agains SILVA
 
 ####################################
 ##########porefile##################
 ####################################
+
+#Matching step
+
 
 setwd("raw/results_silva_polishON_human/")
 list.files()
@@ -93,6 +94,8 @@ mean(neg$Abundance)
 
 
 ########################################################################
+#Polishing step
+
 count <- read.table("NanoPlots/summary.tsv", sep = "\t", header = T)
 c1 <- as.data.frame(read.table("COUNTS_polished.tsv", sep = "\t", header = T))
 t1 <- as.data.frame(read.table("TAXCLA_polished.tsv", sep = "\t", header = T))
@@ -124,11 +127,13 @@ top20 <- names(sort(taxa_sums(ps1), decreasing=TRUE))[1:10000]
 ps.top20 <- transform_sample_counts(ps1, function(OTU) OTU/sum(OTU))
 ps.top20 <- prune_taxa(top20, ps.top20)
 
+graph2 <- psmelt(ps.top20)
+
 target <- meta$Species
-pos <- filter(graph1, Species %in% target)
+pos <- filter(graph2, Species %in% target)
 dim(pos)
 min(pos$Abundance)
-neg <- graph1[!graph1$Species %in% pos$Species, ]
+neg <- graph2[!graph2$Species %in% pos$Species, ]
 mean(neg$Abundance)
 
 pos <- pos %>% group_by(id, Species) %>%
@@ -138,7 +143,8 @@ oth <- neg %>% group_by(id) %>%
   summarise(sum = sum(Abundance))
 oth$Species <- c("Others")
 
-oth <- select(oth, id, Species, sum)
+oth <- select(oth, id, Species, sum) #porefile have 6.8% of misclassifications after the polishing step at Species-level
+oth$sum*100
 
 all <- as.data.frame(rbind(pos, oth))
 
@@ -160,7 +166,7 @@ g2 <- p +  geom_bar(aes(), stat="identity", position="fill") +
 g2
 
 metadata <- meta
-
+dim(metadata)
 metadata$expected <- as.numeric(("0.99"))
 
 joined <- left_join(metadata, all, by = "Species")
@@ -171,7 +177,7 @@ joined$id <- joined$id %>% replace_na('not_retrived')
 joined$status <- joined$original == joined$id
 joined$observed[is.na(joined$observed)] <- 0
 head(joined)
-table(joined$status)
+table(joined$status) #90 out of 101 HCC components are detected with porefile
 
 pf <-joined[which(joined$status == "FALSE"),]
 
@@ -211,7 +217,8 @@ pos <- pos %>% group_by(id, species) %>%
 
 oth <- neg %>% group_by(id) %>%
   summarise(sum = sum(as.numeric(abundance)))
-oth$species <- c("Others")
+oth$species <- c("Others") #11.2% of misclasifications with EMU
+oth$sum*100
 
 oth <- select(oth, id, species, sum)
 
@@ -247,7 +254,7 @@ joined$original <- c("human")
 joined$status <- joined$original == joined$id
 joined$observed[is.na(joined$observed)] <- 0
 head(joined)
-table(joined$status)
+table(joined$status) #92 out of 101 components were detected with EMU
 
 e <- joined[which(joined$status == "FALSE"),]
 
@@ -293,6 +300,7 @@ oth <- neg %>% group_by(id) %>%
   summarise(sum = sum(abundance))
 oth$Species <- c("Others")
 oth <- select(oth, id, Species, sum)
+oth$sum*100 #25.7% of misclassifications with wf-metagenomics
 
 all <- as.data.frame(rbind(pos, oth))
 head(all)
@@ -311,7 +319,7 @@ joined$original <- c("human")
 joined$status <- joined$original == joined$id
 joined$observed[is.na(joined$observed)] <- 0
 head(joined)
-table(joined$status)
+table(joined$status) #94 out of 101 components were detected with wf-metagenomics
 
 wm <- joined[which(joined$status == "FALSE"),]
 
@@ -449,36 +457,6 @@ df <- read.csv("BVBRC_genome_env.csv", header = T)
 head(df)
 
 dff <- select(df, Species, Genome.ID, GenBank.Accessions)
-# 
-# h <- read.table("headers_env.txt", 
-#                 sep = "\t", header = F)
-# head(h)
-# 
-# h$V1 <- gsub("samp_filt_sim_16S_barrnap_accn_", "", h$V1)
-# h$V1 <- gsub(".fasta.fastq.fastq", "", h$V1)
-# 
-# colnames(h) <- c("GenBank.Accessions")
-# 
-# meta <-merge(dff, h, by = "GenBank.Accessions")
-# dim(meta)
-# 
-# retrive <- as.data.frame(meta$GenBank.Accessions)
-# 
-# dir.create("../output_tables")
-# write.table(retrive, "../output_tables/retrive.txt",
-#             sep = "\t", row.names = F, quote = F)
-
-
-####################################################################################
-library(phyloseq)
-library(ggplot2)
-library(stringr)
-library(dplyr)
-library(Metrics)
-library(viridis)
-library(ggpubr)
-library(ggalluvial)
-library(RColorBrewer)
 
 
 #######################################
@@ -771,6 +749,7 @@ wf[is.na(wf)] <- 0
 wf$rmse <- rmse(wf$expected, wf$observed)
 mean(wf$observed)
 
+
 tab <- as.data.frame(rbind(porefile, emu, wf))
 tab[is.na(tab)] <- 0
 head(tab)
@@ -864,9 +843,9 @@ q <- ggplot(c, aes(x=method_f, y=Species, fill=abundance))+
 q
 
 
-#################################################################################################
-#########################################
-######################
+##########################################################
+#########combine human and environment results############
+##########################################################
 
 tab <- as.data.frame(rbind(human, envir))
 p <- ggplot(tab, aes(x=method_f, y=observed)) +
@@ -1015,55 +994,3 @@ row.names(rmse) <- NULL
 
 write.table(rmse, "../../output_tables/methods_rmse_HCC.tsv", sep = "\t", row.names = F, quote = F)
 
-# ###############################################
-# #Other analysis
-# head(tab)
-# 
-# t <- tab %>% filter(observed == 0)
-# e <- tab[which(tab$method == "EMU"),]
-# dim(e)
-# t_e <- t[which(t$method == "EMU"),]
-# dim(t_e)
-# 
-# e <- tab[which(tab$method == "EMU"),]
-# dim(e)
-# t_e <- t[which(t$method == "EMU"),]
-# dim(t_e)
-# 
-# #EMU detected 86.72566
-# 
-# p <- tab[which(tab$method == "porefile"),]
-# dim(p)
-# t_p <- t[which(t$method == "porefile"),]
-# dim(t_p)
-# 
-# #porefile 92.0354
-# 
-# 
-# w <- tab[which(tab$method == "wf-metagenomics"),]
-# dim(w)
-# t_w <- t[which(t$method == "wf-metagenomics"),]
-# dim(t_w)
-# 
-# #wf-metagenomics 89.38053
-# 
-# 
-# t$count <- as.numeric(c("1"))
-# tt <- t %>% group_by(method) %>%
-#   summarise(sum = sum(count))
-# 
-# em <- t[which(t$method == "EMU"),]
-# por <- t[which(t$method == "porefile"),]
-# wf <- t[which(t$method == "wf-metagenomics"),]
-# 
-# 
-# em$Species == por$Species
-# em$Species == wf$Species
-# wf$Species == por$Species
-# 
-# 
-# intersect(intersect(em$Species,por$Species),wf$Species)
-# intersect(em$Species,por$Species)
-# intersect(wf$Species,por$Species)
-# 
-# setdiff(em$Species,por$Species)
