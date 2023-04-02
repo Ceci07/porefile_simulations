@@ -10,10 +10,11 @@ ONT read simulation for the 16S rRNA gene references were performed with [Badrea
 Simulated reads were then filtered with [Nanofilt](https://github.com/wdecoster/nanofilt) and only reads with a quality score above 10 and length between 1000 and 1700 bp were kept for analysis.
 
 ## **LCC and HCC generation**
-Simulated reads were sampled using [fastq-tools](https://github.com/dcjones/fastq-tools) for each component. The LCC mimics the relative abundances expected for the ZymoBiomics Microbial Community Standard. The HCC consisted of equal amounts of reads per component (human ~1% and environment ~8.3%).
+Simulated reads were sampled using [fastq-tools](https://github.com/dcjones/fastq-tools) for each component. The LCC reads were combined to mimic the relative abundance expected for the ZymoBiomics Microbial Community Standard components. Ten replicates were generatd from the simulated sampled reads. 
+The HCC consisted of equal amounts of reads per component. The expected relative abundance for each component was ~1% for the human simulated dataset (n = 101) and ~8.3% for the environment simulated dataset (n = 12).
 
 ## **Taxonomic classification**
 Taxonomic classification of the LCC and HCC were performed with [porefile](https://github.com/microgenlab/porefile), [EMU](https://gitlab.com/treangenlab/emu) and [wf-metagenomics](https://github.com/epi2me-labs/wf-metagenomics) workflows.
 
 ## **Analysis**
-[porefile](https://github.com/microgenlab/porefile) , [EMU](https://gitlab.com/treangenlab/emu) and [wf-metagenomics](https://github.com/epi2me-labs/wf-metagenomics) outputs were processed and compared in terms of percentage of correct and incorrect taxonomic classifications and the recovery of the expected relative abundance.
+[porefile](https://github.com/microgenlab/porefile), [EMU](https://gitlab.com/treangenlab/emu) and [wf-metagenomics](https://github.com/epi2me-labs/wf-metagenomics) outputs were processed and compared in terms of percentage of correct and incorrect taxonomic classifications and the recovery of the expected relative abundance.
