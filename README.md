@@ -1,4 +1,4 @@
-# Taxonomic classification comparisons on simulated communities
+# Taxonomic classification of simulated communities
 
 ## **Reference 16S rRNA gene sequences**
 Reference sequences for the low complexity community (LCC) were retrieved from the [ZymoBiomics Microbial Community Standard](https://files.zymoresearch.com/protocols/_d6300_zymobiomics_microbial_community_standard.pdf) web page.
