@@ -1,9 +1,9 @@
-# porefile analysis
+# porefile: automatic profiling of microbial communities using full-length 16S rRNA gene sequencing data
 
 ## **Reference 16S rRNA gene sequences**
 Reference sequences for the low complexity community (LCC) were retrived from the [ZymoBiomics Microbial Community Standard](https://files.zymoresearch.com/protocols/_d6300_zymobiomics_microbial_community_standard.pdf) web page.
 
-The reference 16S rRNA gene sequences for the high complexity communities (HCC) were retrive from complete genomes from the [PATRIC database](https://www.bv-brc.org/view/Bacteria/2#view_tab=genomes). 16S rRNA genes were extracted using [barrnap](https://github.com/tseemann/barrnap) and used for ONT read simulation.
+The reference 16S rRNA gene sequences for the high complexity communities (HCC) were retrive from complete genomes from the [BACTERIAL AND VIRAL BIOINFORMATICS RESOURCE CENTER](https://www.bv-brc.org/view/Bacteria/2#view_tab=genomes). 16S rRNA genes were extracted using [barrnap](https://github.com/tseemann/barrnap) and used for ONT read simulation.
 
 ## **ONT read simulation**
 ONT read simulation for the 16S rRNA gene references were performed with [Badread](https://github.com/rrwick/Badread) the "nanopore2020" error model and default identity (87.5% ± 5%, max. 97.5%)
