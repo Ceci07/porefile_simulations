@@ -3,7 +3,7 @@
 ## **Reference 16S rRNA gene sequences**
 Reference sequences for the low complexity community (LCC) were retrieved from the [ZymoBiomics Microbial Community Standard](https://files.zymoresearch.com/protocols/_d6300_zymobiomics_microbial_community_standard.pdf) web page.
 
-The reference 16S rRNA gene sequences for the high complexity communities (HCC) were retrive from complete genomes from the [BACTERIAL AND VIRAL BIOINFORMATICS RESOURCE CENTER](https://www.bv-brc.org/view/Bacteria/2#view_tab=genomes). 16S rRNA genes were extracted using [barrnap](https://github.com/tseemann/barrnap) and used for ONT read simulation.
+The reference 16S rRNA gene sequences for the high complexity communities (HCC) were retrive from complete genomes from the [BACTERIAL AND VIRAL BIOINFORMATICS RESOURCE CENTER](https://www.bv-brc.org/view/Bacteria/2#view_tab=genomes). 16S rRNA genes sequences were extracted using [barrnap](https://github.com/tseemann/barrnap) and used for ONT read simulation.
 
 ## **ONT read simulation**
 ONT read simulation for the 16S rRNA gene references were performed with [Badread](https://github.com/rrwick/Badread) using the "nanopore2020" error model with a read length distribution of 1500 ± 200 bp and default identity (87.5% ± 5%, max. 97.5%).
