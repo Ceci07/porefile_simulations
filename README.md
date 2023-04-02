@@ -16,4 +16,4 @@ Simulated reads were sampled using [fastq-tools](https://github.com/dcjones/fast
 Taxonomic classification of the LCC and HCC were performed with [porefile](https://github.com/microgenlab/porefile), [EMU](https://gitlab.com/treangenlab/emu) and [wf-metagenomics](https://github.com/epi2me-labs/wf-metagenomics) workflows.
 
 ## **Analysis**
-profile , EMU and wf-metagenomics outputs were processed and compared in terms of percentage of correct and incorrect taxonomic classifications and the recovery of the expected relative abundance.
+[porefile](https://github.com/microgenlab/porefile) , [EMU](https://gitlab.com/treangenlab/emu) and [wf-metagenomics](https://github.com/epi2me-labs/wf-metagenomics) outputs were processed and compared in terms of percentage of correct and incorrect taxonomic classifications and the recovery of the expected relative abundance.
